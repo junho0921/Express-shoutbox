@@ -1,23 +1,28 @@
 /**
  * Module dependencies.
  */
-
-var api = require('./routes/api');
-var entries = require('./routes/entries');
-var express = require('express');
-var routes = require('./routes');
+// 核心模块
 var http = require('http');
 var path = require('path');
-var register = require('./routes/register');
-var messages = require('./lib/messages');
-var login = require('./routes/login');
-var user = require('./lib/middleware/user');
-var validate = require('./lib/middleware/validate');
-var page = require('./lib/middleware/page');
-var Entry = require('./lib/entry');
+var express = require('express');
+// 路由模块
+var entries =   require('./routes/entries');
+var routes =    require('./routes/index');
+var register =  require('./routes/register');
+var login =     require('./routes/login');
+var api =       require('./routes/api');
 
+// models
+var messages =  require('./lib/messages');
+var Entry =     require('./lib/entry');
+
+// 中间件
+var user =      require('./lib/middleware/user');
+var page =      require('./lib/middleware/page');
+var validate =  require('./lib/middleware/validate');
+
+// 配置中间件
 var app = express();
-
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
@@ -38,9 +43,10 @@ app.use(routes.error);
 
 // development only
 if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
+    app.use(express.errorHandler());
 }
 
+// 路由逻辑
 app.get('/register', register.form);
 app.post('/register', register.submit);
 app.get('/login', login.form);
@@ -48,10 +54,10 @@ app.post('/login', login.submit);
 app.get('/logout', login.logout);
 app.get('/post', entries.form);
 app.post(
-   '/post',
-   validate.required('entry[title]'),
-   validate.lengthAbove('entry[title]', 4),
-   entries.submit
+    '/post',
+    validate.required('entry[title]'),
+    validate.lengthAbove('entry[title]', 4),
+    entries.submit
 );
 app.get('/api/user/:id', api.user);
 app.post('/api/entry', entries.submit);
@@ -59,13 +65,14 @@ app.get('/api/entries/:page?', page(Entry.count), api.entries);
 app.get('/:page?', page(Entry.count, 5), entries.list);
 
 if (process.env.ERROR_ROUTE) {
-  app.get('/dev/error', function(req, res, next){
-    var err = new Error('database connection failed');
-    err.type = 'database';
-    next(err);
-  });
+    app.get('/dev/error', function(req, res, next){
+        var err = new Error('database connection failed');
+        err.type = 'database';
+        next(err);
+    });
 }
 
+// 启动服务器
 http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+    console.log('Express server listening on port ' + app.get('port'));
 });
