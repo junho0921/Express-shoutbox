@@ -21,9 +21,9 @@ var user =      require('./lib/middleware/user');
 var page =      require('./lib/middleware/page');
 var validate =  require('./lib/middleware/validate');
 
-// 配置中间件
 var app = express();
 // all environments
+// 服务器基本功能配置
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
@@ -34,7 +34,8 @@ app.use(express.methodOverride());
 app.use(express.cookieParser('your secret here'));
 app.use(express.session());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/api', api.auth);
+// 使用自定义中间件
+app.use('/api', api.auth);// todo 不懂? 用户认证?
 app.use(user);
 app.use(messages);
 app.use(app.router);
