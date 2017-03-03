@@ -35,7 +35,7 @@ app.use(express.cookieParser('your secret here'));
 app.use(express.session());
 app.use(express.static(path.join(__dirname, 'public')));
 // 使用自定义中间件
-app.use('/api', api.auth);// todo 不懂? 用户认证?
+app.use('/api', api.auth);// 基本认证: 保证API安全和限制的方式
 app.use(user);
 app.use(messages);
 app.use(app.router);
@@ -60,10 +60,14 @@ app.post(
     validate.lengthAbove('entry[title]', 4),
     entries.submit
 );
-app.get('/api/user/:id', api.user);
-app.post('/api/entry', entries.submit);
-app.get('/api/entries/:page?', page(Entry.count), api.entries);
-app.get('/:page?', page(Entry.count, 5), entries.list);
+app.get('/api/user/:id', api.user); // REST API
+app.post('/api/entry', entries.submit); // REST API
+app.get('/api/entries/:page?', page(Entry.count), api.entries); // REST API
+app.get(
+    '/:page?',
+    page(Entry.count, 5), // 当路径是"/", 先执行计算页码的中间件
+    entries.list
+);
 
 if (process.env.ERROR_ROUTE) {
     app.get('/dev/error', function(req, res, next){
