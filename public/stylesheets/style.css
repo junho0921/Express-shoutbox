@@ -10,7 +10,7 @@ a {
 #menu {
   position: absolute;
   top: 15px;
-  right: 20px;
+  left: 20px;
   font-size: 12px;
   color: #888;
 }

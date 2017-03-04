@@ -47,27 +47,24 @@ if ('development' == app.get('env')) {
     app.use(express.errorHandler());
 }
 
-// 路由逻辑
+// 注册
 app.get('/register', register.form);
 app.post('/register', register.submit);
 app.get('/registerList', register.list);
-
-
+// 登陆
 app.get('/login', login.form);
 app.post('/login', login.submit);
 app.get('/logout', login.logout);
-
+// 上传文章
 app.get('/post', entries.form);
-app.post(
-    '/post',
-    //validate.required('entry[title]'),
-    //validate.lengthAbove('entry[title]', 4),
-    entries.submit
-);
-app.get('/api/user/:id', api.user);
-app.post('/api/entry', entries.submit);
-//app.get('/api/entries/:page?', page(Entry.count), api.entries);
+app.post('/post', entries.submit);
+// 首页
 app.get('/:page?', page(Entry, 5), entries.list);
+
+// 外部API
+//app.get('/api/user/:id', api.user);
+//app.post('/api/entry', entries.submit);
+//app.get('/api/entries/:page?', page(Entry.count), api.entries);
 
 if (process.env.ERROR_ROUTE) {
     app.get('/dev/error', function(req, res, next){
