@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>名单</title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+<% include menu %>
+
+<h1>已注册的用户名单</h1>
+<a href="/register">返回注册页面</a>
+
+<% include messages %>
+<ul>
+  <% if (users) { %>
+    <% users.forEach(function(user) { %>
+      <li><%= user.name %></li>
+    <% }) %>
+  <% } %>
+</ul>
+</body>
+</html>

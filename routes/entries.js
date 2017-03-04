@@ -2,12 +2,13 @@ var Entry = require('../lib/entry');
 
 exports.list = function(req, res, next){
   var page = req.page;
+  console.log('列表展示页面', page);
   Entry.getRange(page.from, page.to, function(err, entries) {
     if (err) return next(err);
 
     res.render('entries', {
       title: 'Entries',
-      entries: entries,
+      entries: entries
     });
   });
 };
@@ -17,19 +18,24 @@ exports.form = function(req, res){
 };
 
 exports.submit = function(req, res, next){
-  var data = req.body.entry;
 
+  if(!res.locals.user || !res.locals.user.name){
+    res.redirect('/login');
+    return;
+  }
+  var data = req.body.entry;
   var entry = new Entry({
     "username": res.locals.user.name,
     "title": data.title,
     "body": data.body
   });
 
-  entry.save(function(err) {
+  entry.save(function(err, data) {
     if (err) return next(err);
     if (req.remoteUser) {
-      res.json({message: 'Entry added.'});
+      res.json({message: 'Entry added.'});// 提供给外部接口的成功信息
     } else {
+      console.log('成功提交entry信息', data);
       res.redirect('/');
     }
   });

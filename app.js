@@ -50,20 +50,24 @@ if ('development' == app.get('env')) {
 // 路由逻辑
 app.get('/register', register.form);
 app.post('/register', register.submit);
+app.get('/registerList', register.list);
+
+
 app.get('/login', login.form);
 app.post('/login', login.submit);
 app.get('/logout', login.logout);
+
 app.get('/post', entries.form);
 app.post(
     '/post',
-    validate.required('entry[title]'),
-    validate.lengthAbove('entry[title]', 4),
+    //validate.required('entry[title]'),
+    //validate.lengthAbove('entry[title]', 4),
     entries.submit
 );
 app.get('/api/user/:id', api.user);
 app.post('/api/entry', entries.submit);
-app.get('/api/entries/:page?', page(Entry.count), api.entries);
-app.get('/:page?', page(Entry.count, 5), entries.list);
+//app.get('/api/entries/:page?', page(Entry.count), api.entries);
+app.get('/:page?', page(Entry, 5), entries.list);
 
 if (process.env.ERROR_ROUTE) {
     app.get('/dev/error', function(req, res, next){
