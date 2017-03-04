@@ -21,6 +21,7 @@ exports.entries = function(req, res, next){
     //启用内容协商
     // 客户端可以指定它乐于接受的，以及喜欢的数据格式。
       // HTTP通过Accept请求头域提供了内容协商机制。
+    //entries.reverse();
     res.format({
       json: function(){
         res.send(entries);

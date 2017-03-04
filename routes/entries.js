@@ -2,6 +2,15 @@ var Entry = require('../lib/entry');
 
 exports.list = function(req, res, next){
   var page = req.page;
+  console.log('000000000000000   ', page);
+  if(!page.total){
+    res.error('木有任何内容');
+    res.render('entries', {
+      title: 'Entries',
+      entries: []
+    });
+    return;
+  }
   Entry.getRange(page.from, page.to, function(err, entries) {
     if (err) return next(err);
     res.render('entries', {
