@@ -6,7 +6,8 @@ var Entry = require('../lib/entry');
 exports.auth = express.basicAuth(User.authenticate);
 
 exports.user = function(req, res, next){
-  User.get(req.params.id, function(err, user){
+  User.find({name: req.params.name}, function(err, user){
+    user = user[0];
     if (err) return next(err);
     if (!user.id) return res.send(404);
     res.json(user);

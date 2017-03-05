@@ -35,7 +35,7 @@ app.use(express.cookieParser('your secret here'));
 app.use(express.session());
 app.use(express.static(path.join(__dirname, 'public')));
 // 使用自定义中间件
-app.use('/api', api.auth);// 所有外部接口都走这基本认证: 保证API安全和限制的方式
+//app.use('/api', api.auth);// 所有外部接口都走这基本认证: 保证API安全和限制的方式
 app.use(user);
 app.use(messages);
 app.use(app.router);
@@ -62,9 +62,9 @@ app.post('/post', entries.submit);
 app.get('/:page?', page(Entry, 5), entries.list);
 
 // 外部API
-//app.get('/api/user/:id', api.user);
-//app.post('/api/entry', entries.submit);
-//app.get('/api/entries/:page?', page(Entry.count), api.entries);
+app.get('/api/user/:name', api.user);
+app.post('/api/entry', entries.submit);
+app.get('/api/entries/:page?', page(Entry, 5), api.entries);
 
 if (process.env.ERROR_ROUTE) {
     app.get('/dev/error', function(req, res, next){
