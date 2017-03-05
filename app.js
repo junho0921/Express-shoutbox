@@ -35,7 +35,7 @@ app.use(express.cookieParser('your secret here'));
 app.use(express.session());
 app.use(express.static(path.join(__dirname, 'public')));
 // 使用自定义中间件
-app.use('/api', api.auth);// 基本认证: 保证API安全和限制的方式
+app.use('/api', api.auth);// 所有外部接口都走这基本认证: 保证API安全和限制的方式
 app.use(user);
 app.use(messages);
 app.use(app.router);
